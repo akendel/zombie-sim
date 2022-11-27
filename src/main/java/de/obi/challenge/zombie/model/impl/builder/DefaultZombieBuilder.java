@@ -1,13 +1,13 @@
 package de.obi.challenge.zombie.model.impl.builder;
 
 
-import de.obi.challenge.zombie.model.api.Actor;
+import de.obi.challenge.zombie.model.api.Zombie;
 import de.obi.challenge.zombie.model.api.builder.ZombieBuilder;
-import de.obi.challenge.zombie.model.impl.BaseActor;
+import de.obi.challenge.zombie.model.impl.DefaultZombie;
 import de.obi.challenge.zombie.model.impl.attack.AttackStrategy;
-import de.obi.challenge.zombie.model.impl.defence.DefenceStrategy;
 import de.obi.challenge.zombie.model.impl.attack.DefaultAttack;
 import de.obi.challenge.zombie.model.impl.defence.DefaultDefence;
+import de.obi.challenge.zombie.model.impl.defence.DefenceStrategy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -35,7 +35,7 @@ public class DefaultZombieBuilder implements ZombieBuilder {
     }
 
     @Override
-    public Actor build() {
-        return new BaseActor(1, attackStrategy, defenceStrategy);
+    public Zombie build() {
+        return new DefaultZombie(1, attackStrategy, defenceStrategy);
     }
 }

@@ -9,12 +9,12 @@ import de.obi.challenge.zombie.model.impl.defence.DefenceStrategy;
  *
  * @author 26.11.22 %USER, empulse GmbH
  */
-public class BaseActor implements Actor {
+public abstract class BaseActor implements Actor {
     private int health;
     private final AttackStrategy attackStrategy;
     private final DefenceStrategy defenceStrategy;
 
-    public BaseActor(int health, AttackStrategy attackStrategy, DefenceStrategy defenceStrategy) {
+    protected BaseActor(int health, AttackStrategy attackStrategy, DefenceStrategy defenceStrategy) {
         this.health = health;
         this.attackStrategy = attackStrategy;
         this.defenceStrategy = defenceStrategy;

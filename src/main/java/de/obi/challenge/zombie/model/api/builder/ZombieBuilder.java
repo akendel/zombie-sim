@@ -1,6 +1,6 @@
 package de.obi.challenge.zombie.model.api.builder;
 
-import de.obi.challenge.zombie.model.api.Actor;
+import de.obi.challenge.zombie.model.api.Zombie;
 
 /**
  * TODO: Insert Class Description...
@@ -10,5 +10,5 @@ import de.obi.challenge.zombie.model.api.Actor;
 public interface ZombieBuilder {
     ZombieBuilder withDefaultAttack(int accuracy);
     ZombieBuilder withDefaultDefence();
-    Actor build();
+    Zombie build();
 }
