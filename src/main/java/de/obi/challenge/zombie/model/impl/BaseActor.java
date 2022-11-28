@@ -4,6 +4,8 @@ import de.obi.challenge.zombie.model.api.Actor;
 import de.obi.challenge.zombie.model.impl.attack.AttackStrategy;
 import de.obi.challenge.zombie.model.impl.defence.DefenceStrategy;
 
+import java.util.UUID;
+
 /**
  * TODO: Insert Class Description...
  *
@@ -13,11 +15,16 @@ public abstract class BaseActor implements Actor {
     private int health;
     private final AttackStrategy attackStrategy;
     private final DefenceStrategy defenceStrategy;
+    private final UUID uuid = UUID.randomUUID();
 
     protected BaseActor(int health, AttackStrategy attackStrategy, DefenceStrategy defenceStrategy) {
         this.health = health;
         this.attackStrategy = attackStrategy;
         this.defenceStrategy = defenceStrategy;
+    }
+    @Override
+    public UUID getId() {
+        return uuid;
     }
 
     @Override
