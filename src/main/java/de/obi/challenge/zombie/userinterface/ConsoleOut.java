@@ -6,6 +6,8 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
+
 /**
  * TODO: Insert Class Description...
  *
@@ -16,7 +18,8 @@ import org.springframework.stereotype.Component;
 public class ConsoleOut {
     private final Simulation simulation;
 
-    public ConsoleOut(@Autowired Simulation simulation) {
+    @Autowired
+    public ConsoleOut(Simulation simulation) {
         this.simulation = simulation;
     }
 
@@ -25,23 +28,42 @@ public class ConsoleOut {
         simulation.addEventListener(new SimulationEventListener() {
             @Override
             public void zombieKilled() {
-                System.out.println("Klatch!");
+                printToFrontend("Klatsch!");
             }
 
             @Override
             public void zombieSurvived() {
-                System.out.println("Mist!");
+                printToFrontend("Mist!");
             }
 
             @Override
             public void survivorKilled() {
-
+                // Nothing is printed to the console when a survivor dies.
             }
 
             @Override
             public void survivorSurvived() {
-                System.out.println("Juhu!");
+                printToFrontend("Juhu!");
+            }
+
+            @Override
+            public void simulationFinished(int numberOfZombies, int numberOfSurvivors, Duration duration) {
+                String durationMessage = String.format("Simulation was running for %s minutes and %s seconds", duration.toMinutesPart(), duration.toSecondsPart());
+                printToFrontend(durationMessage);
+
+                String resultMessage = numberOfZombies > numberOfSurvivors ? numberOfZombies + " zombies" : numberOfSurvivors + " survivors";
+                printToFrontend(String.format("%s have won the battle", resultMessage));
+            }
+
+            @Override
+            public void zombieIsPending() {
+                printToFrontend("Grrrr");
             }
         });
+    }
+
+    private void printToFrontend(String message) {
+        System.out.println(message);
+        System.out.flush();
     }
 }

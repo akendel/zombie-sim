@@ -55,6 +55,7 @@ public class ZombieAttackCommand implements Command {
             Zombie zombie = zombieBuilder.withDefaultDefence().withDefaultAttack(50).build();
             LOG.debug("Zombie {} will be added to combat context", zombie.getId());
             combatContext.addZombie(zombie);
+            simulationEventChannel.send(new GenericMessage<>(SimulationEvent.NEW_ZOMBIE));
         }
     }
 }

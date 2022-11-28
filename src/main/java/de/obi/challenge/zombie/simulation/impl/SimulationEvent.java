@@ -10,4 +10,6 @@ public enum SimulationEvent {
     ZOMBIE_SURVIVED,
     SURVIVOR_KILLED,
     SURVIVOR_SURVIVED,
+    NEW_ZOMBIE,
+    PENDING_ZOMBIE,
 }
