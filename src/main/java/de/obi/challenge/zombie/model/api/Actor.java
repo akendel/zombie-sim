@@ -12,7 +12,7 @@ import java.util.UUID;
  */
 public interface Actor {
     UUID getId();
-    void attack(Actor actor);
+    void attackedBy(Actor actor);
     boolean isAlive();
     AttackStrategy getAttackStrategy();
     DefenceStrategy getDefenseStrategy();

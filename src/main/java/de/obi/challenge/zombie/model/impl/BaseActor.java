@@ -28,8 +28,8 @@ public abstract class BaseActor implements Actor {
     }
 
     @Override
-    public void attack(Actor victim) {
-        int damage = victim.getDefenseStrategy().calculateDamage(attackStrategy);
+    public void attackedBy(Actor attacker) {
+        int damage = getDefenseStrategy().calculateDamage(attacker.getAttackStrategy());
         health = health - damage;
     }
 

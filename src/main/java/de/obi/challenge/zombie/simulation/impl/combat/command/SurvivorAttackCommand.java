@@ -37,15 +37,15 @@ public class SurvivorAttackCommand implements Command {
 
         zombies.forEach(zombie -> {
             LOG.debug("Survivor {} attacks zombie {}", survivor.getId(), zombie.getId());
-            survivor.attack(zombie);
+            zombie.attackedBy(survivor);
         });
 
         List<Zombie> zombiesKilled = zombies.stream()
                 .filter(zombie -> !zombie.isAlive()).toList();
         zombiesKilled.forEach(zombie -> {
             LOG.debug("Zombie {} has died", zombie.getId());
-            simulationEventChannel.send(new GenericMessage<>(SimulationEvent.ZOMBIE_KILLED));
             combatContext.removeZombie(zombie);
+            simulationEventChannel.send(new GenericMessage<>(SimulationEvent.ZOMBIE_KILLED));
         });
 
         zombies.stream()

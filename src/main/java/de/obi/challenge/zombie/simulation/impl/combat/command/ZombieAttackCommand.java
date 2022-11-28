@@ -36,24 +36,24 @@ public class ZombieAttackCommand implements Command {
     @Override
     public void execute(CombatContext combatContext) {
         LOG.debug("Start zombie attack round with {} zombies", combatContext.getZombies().size());
-
         Survivor survivor = combatContext.getSurvivor().orElseThrow();
         combatContext.getZombies().forEach(zombie -> {
             LOG.debug("Zombie {} attacks survivor {}", zombie.getId(), survivor.getId());
-            zombie.attack(survivor);
+            survivor.attackedBy(zombie);
         });
 
         if (survivor.isAlive()) {
             LOG.debug("Survivor {} has survived", survivor.getId());
-            simulationEventChannel.send(new GenericMessage<>(SimulationEvent.ZOMBIE_SURVIVED));
+            simulationEventChannel.send(new GenericMessage<>(SimulationEvent.SURVIVOR_SURVIVED));
         } else {
             LOG.debug("Survivor {} has died", survivor.getId());
             combatContext.removeSurvivor();
+            simulationEventChannel.send(new GenericMessage<>(SimulationEvent.SURVIVOR_KILLED));
 
             //TODO Use global factory to create new zombies.
             ZombieBuilder zombieBuilder = applicationContext.getBean(ZombieBuilder.class);
             Zombie zombie = zombieBuilder.withDefaultDefence().withDefaultAttack(50).build();
-            LOG.debug("Zombie {} will ne added to combat context", zombie.getId());
+            LOG.debug("Zombie {} will be added to combat context", zombie.getId());
             combatContext.addZombie(zombie);
         }
     }
