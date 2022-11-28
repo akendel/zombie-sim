@@ -8,7 +8,6 @@ import de.obi.challenge.zombie.model.api.builder.ZombieBuilder;
 import de.obi.challenge.zombie.simulation.api.Simulation;
 import de.obi.challenge.zombie.simulation.api.SimulationConfig;
 import de.obi.challenge.zombie.simulation.api.SimulationEventListener;
-import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -17,11 +16,9 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.support.GenericMessage;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
 /**
@@ -34,9 +31,8 @@ public class SimulationFassade implements Simulation {
     private final MessageChannel pendingActorsChannel;
     private final ApplicationContext applicationContext;
     private SimulationEventListener simulationEventListener;
-    private int zombieCounter = 0;
-    private int survivorCounter = 0;
-    private final StopWatch stopWatch = new StopWatch();
+
+    private SimulationState simulationState;
 
     SimulationFassade(
             @Qualifier("pendingActorsChannel") MessageChannel pendingActorsChannel,
@@ -48,14 +44,14 @@ public class SimulationFassade implements Simulation {
 
     @Override
     public void startSimulation(SimulationConfig simulationConfig) {
-        stopWatch.start();
+        simulationState = new SimulationState(
+                simulationConfig.numberOfZombies(),
+                simulationConfig.numberOfSurvivors()
+        );
         LOG.info("Start simulation with {} survivors and {} zombies!",
                 simulationConfig.numberOfSurvivors(),
                 simulationConfig.numberOfZombies()
         );
-
-        this.zombieCounter = simulationConfig.numberOfZombies();
-        this.survivorCounter = simulationConfig.numberOfSurvivors();
 
         List<Zombie> zombies = IntStream.range(0, simulationConfig.numberOfZombies())
                 .mapToObj(value -> getDefaultZombie(simulationConfig.accuracyOfZombies())).toList();
@@ -94,53 +90,34 @@ public class SimulationFassade implements Simulation {
         switch (message.getPayload()) {
             case ZOMBIE_KILLED -> {
                 simulationEventListener.zombieKilled();
-                decreaseZombieCount();
+                simulationState.decreaseZombieCount();
+                simulationState.logCurrentState();
+                checkIfSimulationHasFinished();
             }
             case ZOMBIE_SURVIVED -> simulationEventListener.zombieSurvived();
             case SURVIVOR_KILLED -> {
                 simulationEventListener.survivorKilled();
-                decreaseSurvivorCount();
+                simulationState.decreaseSurvivorCount();
+                simulationState.logCurrentState();
+                checkIfSimulationHasFinished();
             }
-            case NEW_ZOMBIE -> increaseZombieCount();
+            case NEW_ZOMBIE -> simulationState.increaseZombieCount();
             case SURVIVOR_SURVIVED -> simulationEventListener.survivorSurvived();
             case PENDING_ZOMBIE -> simulationEventListener.zombieIsPending();
         }
     }
 
-    private void increaseZombieCount() {
-        this.zombieCounter = zombieCounter + 1;
-        logCurrentState();
-    }
 
-    private void decreaseSurvivorCount() {
-        this.survivorCounter = survivorCounter - 1;
-        logCurrentState();
-        if (this.survivorCounter == 0) {
-            simulationFinished();
+
+    private void checkIfSimulationHasFinished() {
+        if(simulationState.isSimulationFinished()) {
+            simulationEventListener.simulationFinished(
+                    simulationState.getZombieCounter(),
+                    simulationState.getSurvivorCounter(),
+                    simulationState.getDuration()
+            );
         }
     }
 
-    private void decreaseZombieCount() {
-        this.zombieCounter = zombieCounter - 1;
-        logCurrentState();
-        if (this.zombieCounter == 0) {
-            simulationFinished();
-        }
-    }
 
-    private void simulationFinished() {
-        simulationEventListener.simulationFinished(
-                zombieCounter,
-                survivorCounter,
-                Duration.ofSeconds(stopWatch.getTime(TimeUnit.SECONDS))
-        );
-    }
-
-    private void logCurrentState() {
-        LOG.debug("Simulation is running for {} seconds. {} survivors and {} zombies are alive",
-                stopWatch.getTime(TimeUnit.SECONDS),
-                survivorCounter,
-                zombieCounter
-        );
-    }
 }
