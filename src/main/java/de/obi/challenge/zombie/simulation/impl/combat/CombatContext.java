@@ -27,7 +27,7 @@ public class CombatContext {
     }
 
     public Optional<Survivor> getSurvivor() {
-        return Optional.of(survivor);
+        return Optional.ofNullable(survivor);
     }
 
     public void removeZombie(Zombie zombie) {
