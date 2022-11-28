@@ -10,21 +10,32 @@
             http://www.springframework.org/schema/task
             http://www.springframework.org/schema/task/spring-task.xsd">
 
-    <channel id="pendingActorsChannel"/>
+    <channel id="pendingActorsChannel">
+        <queue/>
+    </channel>
 
-    <service-activator id="combatGroupGatewayActivator" input-channel="pendingActorsChannel" ref="combatGroupBuilderService" method="handleActor"/>
-    <beans:bean id="combatGroupBuilderService" class="de.obi.challenge.zombie.simulation.impl.flow.CombatGroupBuilderService" />
+    <service-activator id="combatGroupGatewayActivator" input-channel="pendingActorsChannel" method="handleActor">
+        <beans:bean id="combatGroupBuilderService" class="de.obi.challenge.zombie.simulation.impl.flow.CombatContextAggregatorService" />
+        <poller fixed-delay="50"/>
+    </service-activator>
 
     <channel id="combatGroupsChannel">
         <dispatcher task-executor="executor"/>
     </channel>
     <task:executor id="executor" pool-size="10"/>
 
-    <service-activator id="combatExecutorActivator" input-channel="combatGroupsChannel" ref="combatService" method="fight"/>
-    <beans:bean id="combatService" class="de.obi.challenge.zombie.simulation.impl.combat.CombatService" scope="prototype"/>
+    <chain id="combatChain" input-channel="combatGroupsChannel" output-channel="pendingActorsChannel">
+        <service-activator id="combatServiceActivator" method="fight">
+            <beans:bean class="de.obi.challenge.zombie.simulation.impl.flow.CombatService"/>
+        </service-activator>
+        <splitter id="combatGroupSplitter" method="splitCombatContext">
+            <beans:bean class="de.obi.challenge.zombie.simulation.impl.flow.CombatContextSplitter"/>
+        </splitter>
+    </chain>
 
+    <!-- Event handling -->
     <channel id="simulationEventChannel"/>
 
-    <service-activator input-channel="simulationEventChannel" ref="simulationFassade" method="handleSimulationEvent"/>
+    <service-activator input-channel="simulationEventChannel" method="handleSimulationEvent" ref="simulationFassade" />
     <beans:bean id="simulationFassade" class="de.obi.challenge.zombie.simulation.impl.SimulationFassade" />
 </beans:beans>

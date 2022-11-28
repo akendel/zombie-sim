@@ -2,7 +2,6 @@ package de.obi.challenge.zombie.simulation.impl.combat.chain;
 
 import de.obi.challenge.zombie.simulation.impl.combat.CombatContext;
 import de.obi.challenge.zombie.simulation.impl.combat.command.Command;
-import de.obi.challenge.zombie.simulation.impl.combat.command.ReleasePendingActorsCommand;
 import de.obi.challenge.zombie.simulation.impl.combat.command.SurvivorAttackCommand;
 import de.obi.challenge.zombie.simulation.impl.combat.command.ZombieAttackCommand;
 import org.slf4j.Logger;
@@ -27,13 +26,11 @@ public class DelayedCommandChain implements CommandChain {
     @Autowired
     public DelayedCommandChain(
             ZombieAttackCommand zombieAttackCommand,
-            SurvivorAttackCommand survivorAttackCommand,
-            ReleasePendingActorsCommand releasePendingActorsCommand
+            SurvivorAttackCommand survivorAttackCommand
     ) {
         this.commandList = Arrays.asList(
                 survivorAttackCommand,
-                zombieAttackCommand,
-                releasePendingActorsCommand
+                zombieAttackCommand
         );
     }
 

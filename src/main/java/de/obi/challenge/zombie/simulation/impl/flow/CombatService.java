@@ -1,6 +1,7 @@
-package de.obi.challenge.zombie.simulation.impl.combat;
+package de.obi.challenge.zombie.simulation.impl.flow;
 
 import de.obi.challenge.zombie.model.api.Survivor;
+import de.obi.challenge.zombie.simulation.impl.combat.CombatContext;
 import de.obi.challenge.zombie.simulation.impl.combat.chain.CommandChain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,9 +21,10 @@ public class CombatService {
         this.commandChain = commandChain;
     }
 
-    public void fight(CombatContext combatContext) {
+    public CombatContext fight(CombatContext combatContext) {
         Survivor survivor = combatContext.getSurvivor().orElseThrow();
         LOG.debug("Start combat with survivor {} and {} zombies", survivor.getId(), combatContext.getZombies().size());
         commandChain.execute(combatContext);
+        return combatContext;
     }
 }
