@@ -43,7 +43,6 @@ public class ConsoleInput implements CommandLineRunner {
         if (cmd.hasOption(NUMBER_OF_SURVIVORS) && cmd.hasOption(NUMBER_OF_ZOMBIES)) {
             SimulationConfig config = buildConfiguration(cmd);
             simulation.startSimulation(config);
-            LOG.info("Start simulation with {} survivors and {} zombies!", NUMBER_OF_SURVIVORS, NUMBER_OF_ZOMBIES);
         } else {
             HelpFormatter formatter = new HelpFormatter();
             formatter.printHelp("./gradlew bootRun --args='--zombies 100 --survivors 23'", options);
@@ -51,7 +50,7 @@ public class ConsoleInput implements CommandLineRunner {
     }
 
     private SimulationConfig buildConfiguration(CommandLine cmd) {
-        int numberOfZombies = Integer.parseInt(cmd.getOptionValue(NUMBER_OF_SURVIVORS));
+        int numberOfZombies = Integer.parseInt(cmd.getOptionValue(NUMBER_OF_ZOMBIES));
         int numberOfSurvivors = Integer.parseInt(cmd.getOptionValue(NUMBER_OF_SURVIVORS));
         int accuracyOfZombieAttacks = Integer.parseInt(cmd.getOptionValue(ZOMBIES_ACCURACY));
         int accuracyOfSurvivorAttacks = Integer.parseInt(cmd.getOptionValue(SURVIVOR_ACCURACY));
