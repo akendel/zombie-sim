@@ -2,14 +2,13 @@ package de.obi.challenge.zombie.simulation.impl.combat.command;
 
 import de.obi.challenge.zombie.model.api.Survivor;
 import de.obi.challenge.zombie.model.api.Zombie;
-import de.obi.challenge.zombie.model.api.builder.ZombieBuilder;
 import de.obi.challenge.zombie.simulation.impl.SimulationEvent;
+import de.obi.challenge.zombie.simulation.impl.combat.ActorFactory;
 import de.obi.challenge.zombie.simulation.impl.combat.CombatContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.ApplicationContext;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.support.GenericMessage;
 import org.springframework.stereotype.Component;
@@ -25,12 +24,12 @@ public class ZombieAttackCommand implements Command {
 
     private final MessageChannel simulationEventChannel;
 
-    private final ApplicationContext applicationContext;
+    private final ActorFactory actorFactory;
 
     public ZombieAttackCommand(@Qualifier("simulationEventChannel") MessageChannel simulationEventChannel,
-                               @Autowired ApplicationContext applicationContext) {
+                               @Autowired ActorFactory actorFactory) {
         this.simulationEventChannel = simulationEventChannel;
-        this.applicationContext = applicationContext;
+        this.actorFactory = actorFactory;
     }
 
     @Override
@@ -50,9 +49,7 @@ public class ZombieAttackCommand implements Command {
             combatContext.removeSurvivor();
             simulationEventChannel.send(new GenericMessage<>(SimulationEvent.SURVIVOR_KILLED));
 
-            //TODO Use global factory to create new zombies.
-            ZombieBuilder zombieBuilder = applicationContext.getBean(ZombieBuilder.class);
-            Zombie zombie = zombieBuilder.withDefaultDefence().withDefaultAttack(50).build();
+            Zombie zombie = actorFactory.getDefaultZombie();
             LOG.debug("Zombie {} will be added to combat context", zombie.getId());
             combatContext.addZombie(zombie);
             simulationEventChannel.send(new GenericMessage<>(SimulationEvent.NEW_ZOMBIE));
