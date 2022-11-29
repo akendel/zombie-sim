@@ -12,9 +12,9 @@ import java.util.Collection;
 import java.util.stream.IntStream;
 
 /**
- * TODO: Insert Class Description...
+ * This is a factory class for creating instances of zombies and survivors.
  *
- * @author 28.11.22 %USER, empulse GmbH
+ * @author 28.11.22 Andreas Kendel
  */
 @Component
 public class ActorFactory {

@@ -8,9 +8,9 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * TODO: Insert Class Description...
+ * This class splits a CombatGroup into a list of actors.
  *
- * @author 28.11.22 %USER, empulse GmbH
+ * @author 28.11.22 Andreas Kendel
  */
 public class CombatGroupSplitter {
     public Collection<Actor> splitCombatGroup(CombatGroup combatGroup) {

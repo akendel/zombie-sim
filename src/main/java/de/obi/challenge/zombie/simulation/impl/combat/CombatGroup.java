@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * TODO: Insert Class Description...
+ * This class represents a combat situation where a single survivor fights against one or more zombies.
  *
- * @author 26.11.22 %USER, empulse GmbH
+ * @author 26.11.22 Andreas Kendel
  */
 public class CombatGroup {
     private final List<Zombie> zombies;

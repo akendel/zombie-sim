@@ -1,9 +1,9 @@
 package de.obi.challenge.zombie.simulation.impl;
 
 /**
- * TODO: Insert Class Description...
+ * Represents the internal events that can be fired by the simulation.
  *
- * @author 27.11.22 %USER, empulse GmbH
+ * @author 27.11.22 Andreas Kendel
  */
 public enum SimulationEvent {
     ZOMBIE_KILLED,

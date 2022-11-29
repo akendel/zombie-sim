@@ -8,9 +8,9 @@ import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 /**
- * TODO: Insert Class Description...
+ * This class hold the current internal state of the simulation.
  *
- * @author 28.11.22 %USER, empulse GmbH
+ * @author 28.11.22 Andreas Kendel
  */
 public class SimulationState {
     private static final Logger LOG = LoggerFactory.getLogger(SimulationState.class);

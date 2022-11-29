@@ -1,9 +1,9 @@
 package de.obi.challenge.zombie.simulation.api;
 
 /**
- * TODO: Insert Class Description...
+ * This class contains the parameters that should be used to start the simulation.
  *
- * @author 27.11.22 %USER, empulse GmbH
+ * @author 27.11.22 Andreas Kendel
  */
 public record SimulationConfig(
         int numberOfZombies,

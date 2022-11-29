@@ -20,9 +20,10 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * TODO: Insert Class Description...
+ * This implementation is responsible for starting the simulation, sending the
+ * simulation events to the frontend and also for detecting if the simulation has finished.
  *
- * @author 27.11.22 %USER, empulse GmbH
+ * @author 27.11.22 Andreas Kendel
  */
 public class SimulationFassade implements Simulation {
     private static final Logger LOG = LoggerFactory.getLogger(SimulationFassade.class);
@@ -89,8 +90,6 @@ public class SimulationFassade implements Simulation {
             case PENDING_ZOMBIE -> simulationEventListener.zombieIsPending();
         }
     }
-
-
 
     private void checkIfSimulationHasFinished() {
         if(simulationState.isSimulationFinished()) {

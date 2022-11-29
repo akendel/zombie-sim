@@ -16,9 +16,10 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 /**
- * TODO: Insert Class Description...
+ * This service is used to aggregate the actors from the payload of the incoming messages into a @{@link CombatGroup}.
+ * A CombatGroup contains one survivor and at least one zombie.
  *
- * @author 27.11.22 %USER, empulse GmbH
+ * @author 27.11.22 Andreas Kendel
  */
 public class CombatGroupAggregatorService {
     private static final Logger LOG = LoggerFactory.getLogger(CombatGroupAggregatorService.class);
@@ -38,6 +39,11 @@ public class CombatGroupAggregatorService {
         this.simulationEventChannel = simulationEventChannel;
     }
 
+    /**
+     * Aggregates the incoming actors into groups whereas a group contains one survivor and one or more zombies.
+     *
+     * @param message Message that contains either a zombie or a survivor as payload.
+     */
     public void handleActor(Message<Actor> message) {
         Actor actor = message.getPayload();
         LOG.debug("Handle actor of type {} with id {}", actor.getClass().getSimpleName(), actor.getId());

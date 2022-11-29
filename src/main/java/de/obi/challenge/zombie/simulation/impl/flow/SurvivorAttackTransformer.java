@@ -14,9 +14,10 @@ import org.springframework.messaging.support.GenericMessage;
 import java.util.List;
 
 /**
- * TODO: Insert Class Description...
+ * This transformer represents the situation where the survivor attacks all the zombies in his proximity. The
+ * incoming {@link CombatGroup} is transformed in a way that killed zombies are removed.
  *
- * @author 26.11.22 %USER, empulse GmbH
+ * @author 26.11.22 Andreas Kendel
  */
 public class SurvivorAttackTransformer {
     private static final Logger LOG = LoggerFactory.getLogger(SurvivorAttackTransformer.class);
