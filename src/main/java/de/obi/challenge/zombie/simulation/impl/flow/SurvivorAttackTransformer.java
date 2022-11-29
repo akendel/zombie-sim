@@ -1,4 +1,4 @@
-package de.obi.challenge.zombie.simulation.impl.combat.command;
+package de.obi.challenge.zombie.simulation.impl.flow;
 
 import de.obi.challenge.zombie.model.api.Actor;
 import de.obi.challenge.zombie.model.api.Survivor;
@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.support.GenericMessage;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -19,17 +18,15 @@ import java.util.List;
  *
  * @author 26.11.22 %USER, empulse GmbH
  */
-@Component
-public class SurvivorAttackCommand implements Command {
-    private static final Logger LOG = LoggerFactory.getLogger(SurvivorAttackCommand.class);
+public class SurvivorAttackTransformer {
+    private static final Logger LOG = LoggerFactory.getLogger(SurvivorAttackTransformer.class);
     private final MessageChannel simulationEventChannel;
 
-    public SurvivorAttackCommand(@Qualifier("simulationEventChannel") MessageChannel simulationEventChannel) {
+    public SurvivorAttackTransformer(@Qualifier("simulationEventChannel") MessageChannel simulationEventChannel) {
         this.simulationEventChannel = simulationEventChannel;
     }
 
-    @Override
-    public void execute(CombatContext combatContext) {
+    public CombatContext execute(CombatContext combatContext) {
         LOG.debug("Start survivor attack round with {} zombies", combatContext.getZombies().size());
 
         List<Zombie> zombies = combatContext.getZombies();
@@ -55,5 +52,6 @@ public class SurvivorAttackCommand implements Command {
                     simulationEventChannel.send(new GenericMessage<>(SimulationEvent.ZOMBIE_SURVIVED));
                 });
 
+        return combatContext;
     }
 }

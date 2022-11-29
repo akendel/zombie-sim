@@ -25,9 +25,12 @@
     <task:executor id="executor" pool-size="10"/>
 
     <chain id="combatChain" input-channel="combatGroupsChannel" output-channel="pendingActorsChannel">
-        <service-activator id="combatServiceActivator" method="fight">
-            <beans:bean class="de.obi.challenge.zombie.simulation.impl.flow.CombatService"/>
-        </service-activator>
+        <transformer id="survivorAttackTransformer" method="execute">
+            <beans:bean class="de.obi.challenge.zombie.simulation.impl.flow.SurvivorAttackTransformer"/>
+        </transformer>
+        <transformer id="zombieAttackTransformer" method="execute">
+            <beans:bean class="de.obi.challenge.zombie.simulation.impl.flow.ZombieAttackTransformer"/>
+        </transformer>
         <splitter id="combatGroupSplitter" method="splitCombatContext">
             <beans:bean class="de.obi.challenge.zombie.simulation.impl.flow.CombatContextSplitter"/>
         </splitter>

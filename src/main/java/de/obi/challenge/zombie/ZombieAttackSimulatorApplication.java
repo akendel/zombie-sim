@@ -7,9 +7,9 @@ import org.springframework.integration.config.EnableIntegration;
 
 @SpringBootApplication
 @EnableIntegration
-@ImportResource({"classpath:spring-integration.xml"})
+@ImportResource({"classpath:META-INF/spring-integration.xml"})
 public class ZombieAttackSimulatorApplication {
-	public static void main(String[] args) {
-		SpringApplication.run(ZombieAttackSimulatorApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ZombieAttackSimulatorApplication.class, args);
+    }
 }

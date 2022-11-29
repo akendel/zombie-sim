@@ -1,4 +1,4 @@
-package de.obi.challenge.zombie.simulation.impl.combat.command;
+package de.obi.challenge.zombie.simulation.impl.flow;
 
 import de.obi.challenge.zombie.model.api.Survivor;
 import de.obi.challenge.zombie.model.api.Zombie;
@@ -11,29 +11,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.support.GenericMessage;
-import org.springframework.stereotype.Component;
 
 /**
  * TODO: Insert Class Description...
  *
  * @author 26.11.22 %USER, empulse GmbH
  */
-@Component
-public class ZombieAttackCommand implements Command {
-    private static final Logger LOG = LoggerFactory.getLogger(ZombieAttackCommand.class);
+public class ZombieAttackTransformer {
+    private static final Logger LOG = LoggerFactory.getLogger(ZombieAttackTransformer.class);
 
     private final MessageChannel simulationEventChannel;
 
     private final ActorFactory actorFactory;
 
-    public ZombieAttackCommand(@Qualifier("simulationEventChannel") MessageChannel simulationEventChannel,
-                               @Autowired ActorFactory actorFactory) {
+    public ZombieAttackTransformer(@Qualifier("simulationEventChannel") MessageChannel simulationEventChannel,
+                                   @Autowired ActorFactory actorFactory) {
         this.simulationEventChannel = simulationEventChannel;
         this.actorFactory = actorFactory;
     }
 
-    @Override
-    public void execute(CombatContext combatContext) {
+    public CombatContext execute(CombatContext combatContext) {
         LOG.debug("Start zombie attack round with {} zombies", combatContext.getZombies().size());
         Survivor survivor = combatContext.getSurvivor().orElseThrow();
         combatContext.getZombies().forEach(zombie -> {
@@ -54,5 +51,6 @@ public class ZombieAttackCommand implements Command {
             combatContext.addZombie(zombie);
             simulationEventChannel.send(new GenericMessage<>(SimulationEvent.NEW_ZOMBIE));
         }
+        return combatContext;
     }
 }
