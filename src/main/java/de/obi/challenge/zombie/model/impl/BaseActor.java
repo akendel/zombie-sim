@@ -9,7 +9,7 @@ import java.util.UUID;
 /**
  * TODO: Insert Class Description...
  *
- * @author 26.11.22 %USER, empulse GmbH
+ * @author 26.11.22 Andreas Kendel
  */
 public abstract class BaseActor implements Actor {
     private int health;

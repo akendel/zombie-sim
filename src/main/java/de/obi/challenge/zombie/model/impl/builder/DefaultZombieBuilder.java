@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 /**
  * TODO: Insert Class Description...
  *
- * @author 26.11.22 %USER, empulse GmbH
+ * @author 26.11.22 Andreas Kendel
  */
 @Component
 @Scope("prototype")

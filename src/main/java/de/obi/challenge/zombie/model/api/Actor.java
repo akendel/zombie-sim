@@ -6,9 +6,9 @@ import de.obi.challenge.zombie.model.impl.defence.DefenceStrategy;
 import java.util.UUID;
 
 /**
- * TODO: Insert Class Description...
+ * The actor interface provides some basic methods for objects that can interact in a combat with each other.
  *
- * @author 26.11.22 %USER, empulse GmbH
+ * @author 26.11.22 Andreas Kendel
  */
 public interface Actor {
     UUID getId();

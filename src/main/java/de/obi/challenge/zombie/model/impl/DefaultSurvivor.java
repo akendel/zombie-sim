@@ -7,7 +7,7 @@ import de.obi.challenge.zombie.model.impl.defence.DefenceStrategy;
 /**
  * TODO: Insert Class Description...
  *
- * @author 27.11.22 %USER, empulse GmbH
+ * @author 27.11.22 Andreas Kendel
  */
 public class DefaultSurvivor extends BaseActor implements Survivor {
     public DefaultSurvivor(int health, AttackStrategy attackStrategy, DefenceStrategy defenceStrategy) {

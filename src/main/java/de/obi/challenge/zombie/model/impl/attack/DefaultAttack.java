@@ -5,7 +5,7 @@ import org.apache.commons.lang3.RandomUtils;
 /**
  * TODO: Insert Class Description...
  *
- * @author 26.11.22 %USER, empulse GmbH
+ * @author 26.11.22 Andreas Kendel
  */
 public class DefaultAttack implements AttackStrategy {
     private final int accuracy;

@@ -5,7 +5,7 @@ import de.obi.challenge.zombie.model.impl.attack.AttackStrategy;
 /**
  * TODO: Insert Class Description...
  *
- * @author 26.11.22 %USER, empulse GmbH
+ * @author 26.11.22 Andreas Kendel
  */
 public class DefaultDefence implements DefenceStrategy {
     @Override

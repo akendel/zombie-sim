@@ -3,9 +3,9 @@ package de.obi.challenge.zombie.model.api.builder;
 import de.obi.challenge.zombie.model.api.Zombie;
 
 /**
- * TODO: Insert Class Description...
+ * Builder for creating zombie instances
  *
- * @author 26.11.22 %USER, empulse GmbH
+ * @author 26.11.22 Andreas Kendel
  */
 public interface ZombieBuilder {
     ZombieBuilder withDefaultAttack(int accuracy);
