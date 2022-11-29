@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
 import java.time.Duration;
 
 /**
- * TODO: Insert Class Description...
+ * This class is used to print the simulation events to the console.
  *
- * @author 27.11.22 %USER, empulse GmbH
+ * @author 27.11.22 Andreas Kendel
  */
 
 @Component

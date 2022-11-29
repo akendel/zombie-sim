@@ -10,7 +10,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 /**
- * TODO: Insert Class Description...
+ * This class is used to read the console input and start the simulation with the passed arguments.
  *
  * @author 26.11.22 Andreas Kendel, empulse GmbH
  */
@@ -18,9 +18,9 @@ import org.springframework.stereotype.Component;
 public class ConsoleInput implements CommandLineRunner {
     private static final Logger LOG = LoggerFactory.getLogger(ConsoleInput.class);
     private static final Option NUMBER_OF_ZOMBIES = new Option("z", "zombies", true, "Number of zombies");
-    private static final Option ZOMBIES_ACCURACY = new Option("za", "zombieAccuracy", true, "Accuracy zombie attacks");
+    private static final Option ZOMBIES_ACCURACY = new Option("za", "zombieAccuracy", true, "Accuracy of zombie attacks");
     private static final Option NUMBER_OF_SURVIVORS = new Option("s", "survivors", true, "Number of survivors");
-    private static final Option SURVIVOR_ACCURACY = new Option("sa", "survivorAccuracy", true, "Accuracy survivor attacks");
+    private static final Option SURVIVOR_ACCURACY = new Option("sa", "survivorAccuracy", true, "Accuracy of survivor attacks");
     private final Simulation simulation;
 
     public ConsoleInput(@Autowired Simulation simulation) {
