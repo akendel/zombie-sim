@@ -15,7 +15,7 @@
     </channel>
 
     <service-activator id="combatGroupGatewayActivator" input-channel="pendingActorsChannel" method="handleActor">
-        <beans:bean id="combatGroupBuilderService" class="de.obi.challenge.zombie.simulation.impl.flow.CombatContextAggregatorService" />
+        <beans:bean id="combatGroupBuilderService" class="de.obi.challenge.zombie.simulation.impl.flow.CombatGroupAggregatorService" />
         <poller fixed-delay="50"/>
     </service-activator>
 
@@ -31,8 +31,8 @@
         <transformer id="zombieAttackTransformer" method="execute">
             <beans:bean class="de.obi.challenge.zombie.simulation.impl.flow.ZombieAttackTransformer"/>
         </transformer>
-        <splitter id="combatGroupSplitter" method="splitCombatContext">
-            <beans:bean class="de.obi.challenge.zombie.simulation.impl.flow.CombatContextSplitter"/>
+        <splitter id="combatGroupSplitter" method="splitCombatGroup">
+            <beans:bean class="de.obi.challenge.zombie.simulation.impl.flow.CombatGroupSplitter"/>
         </splitter>
     </chain>
 

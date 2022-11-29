@@ -4,7 +4,7 @@ import de.obi.challenge.zombie.model.api.Actor;
 import de.obi.challenge.zombie.model.api.Survivor;
 import de.obi.challenge.zombie.model.api.Zombie;
 import de.obi.challenge.zombie.simulation.impl.SimulationEvent;
-import de.obi.challenge.zombie.simulation.impl.combat.CombatContext;
+import de.obi.challenge.zombie.simulation.impl.combat.CombatGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,8 +20,8 @@ import java.util.Queue;
  *
  * @author 27.11.22 %USER, empulse GmbH
  */
-public class CombatContextAggregatorService {
-    private static final Logger LOG = LoggerFactory.getLogger(CombatContextAggregatorService.class);
+public class CombatGroupAggregatorService {
+    private static final Logger LOG = LoggerFactory.getLogger(CombatGroupAggregatorService.class);
 
     private final MessageChannel combatGroupsChannel;
     private final MessageChannel simulationEventChannel;
@@ -30,7 +30,7 @@ public class CombatContextAggregatorService {
 
     private final Queue<Survivor> survivorBuffer = new LinkedList<>();
 
-    public CombatContextAggregatorService(
+    public CombatGroupAggregatorService(
             @Qualifier("combatGroupsChannel") MessageChannel combatGroupsChannel,
             @Qualifier("simulationEventChannel") MessageChannel simulationEventChannel
     ) {
@@ -56,9 +56,9 @@ public class CombatContextAggregatorService {
 
             if (!zombieBuffer.isEmpty() && !survivorBuffer.isEmpty()) {
                 LOG.debug("Create new combat group with actor {} and {} zombies", actor.getId(), zombieBuffer.size());
-                CombatContext combatContext = new CombatContext(survivorBuffer.poll(), zombieBuffer.stream().toList());
+                CombatGroup combatGroup = new CombatGroup(survivorBuffer.poll(), zombieBuffer.stream().toList());
                 zombieBuffer.clear();
-                combatGroupsChannel.send(new GenericMessage<>(combatContext));
+                combatGroupsChannel.send(new GenericMessage<>(combatGroup));
             }
         }
     }

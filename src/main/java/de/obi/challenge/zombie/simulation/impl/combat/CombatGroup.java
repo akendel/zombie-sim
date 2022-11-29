@@ -12,12 +12,11 @@ import java.util.Optional;
  *
  * @author 26.11.22 %USER, empulse GmbH
  */
-public class CombatContext {
+public class CombatGroup {
     private final List<Zombie> zombies;
-
     private Survivor survivor;
 
-    public CombatContext(Survivor survivor, List<Zombie> zombies) {
+    public CombatGroup(Survivor survivor, List<Zombie> zombies) {
         this.survivor = survivor;
         this.zombies = new ArrayList<>(zombies);
     }

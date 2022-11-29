@@ -4,7 +4,7 @@ import de.obi.challenge.zombie.model.api.Survivor;
 import de.obi.challenge.zombie.model.api.Zombie;
 import de.obi.challenge.zombie.simulation.impl.SimulationEvent;
 import de.obi.challenge.zombie.simulation.impl.combat.ActorFactory;
-import de.obi.challenge.zombie.simulation.impl.combat.CombatContext;
+import de.obi.challenge.zombie.simulation.impl.combat.CombatGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +30,10 @@ public class ZombieAttackTransformer {
         this.actorFactory = actorFactory;
     }
 
-    public CombatContext execute(CombatContext combatContext) {
-        LOG.debug("Start zombie attack round with {} zombies", combatContext.getZombies().size());
-        Survivor survivor = combatContext.getSurvivor().orElseThrow();
-        combatContext.getZombies().forEach(zombie -> {
+    public CombatGroup execute(CombatGroup combatGroup) {
+        LOG.debug("Start zombie attack round with {} zombies", combatGroup.getZombies().size());
+        Survivor survivor = combatGroup.getSurvivor().orElseThrow();
+        combatGroup.getZombies().forEach(zombie -> {
             LOG.debug("Zombie {} attacks survivor {}", zombie.getId(), survivor.getId());
             survivor.attackedBy(zombie);
         });
@@ -43,14 +43,14 @@ public class ZombieAttackTransformer {
             simulationEventChannel.send(new GenericMessage<>(SimulationEvent.SURVIVOR_SURVIVED));
         } else {
             LOG.debug("Survivor {} has died", survivor.getId());
-            combatContext.removeSurvivor();
+            combatGroup.removeSurvivor();
             simulationEventChannel.send(new GenericMessage<>(SimulationEvent.SURVIVOR_KILLED));
 
             Zombie zombie = actorFactory.getDefaultZombie();
             LOG.debug("Zombie {} will be added to combat context", zombie.getId());
-            combatContext.addZombie(zombie);
+            combatGroup.addZombie(zombie);
             simulationEventChannel.send(new GenericMessage<>(SimulationEvent.NEW_ZOMBIE));
         }
-        return combatContext;
+        return combatGroup;
     }
 }

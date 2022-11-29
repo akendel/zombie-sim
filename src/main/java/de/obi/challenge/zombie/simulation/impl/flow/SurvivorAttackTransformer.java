@@ -4,7 +4,7 @@ import de.obi.challenge.zombie.model.api.Actor;
 import de.obi.challenge.zombie.model.api.Survivor;
 import de.obi.challenge.zombie.model.api.Zombie;
 import de.obi.challenge.zombie.simulation.impl.SimulationEvent;
-import de.obi.challenge.zombie.simulation.impl.combat.CombatContext;
+import de.obi.challenge.zombie.simulation.impl.combat.CombatGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,11 +26,11 @@ public class SurvivorAttackTransformer {
         this.simulationEventChannel = simulationEventChannel;
     }
 
-    public CombatContext execute(CombatContext combatContext) {
-        LOG.debug("Start survivor attack round with {} zombies", combatContext.getZombies().size());
+    public CombatGroup execute(CombatGroup combatGroup) {
+        LOG.debug("Start survivor attack round with {} zombies", combatGroup.getZombies().size());
 
-        List<Zombie> zombies = combatContext.getZombies();
-        Survivor survivor = combatContext.getSurvivor().orElseThrow();
+        List<Zombie> zombies = combatGroup.getZombies();
+        Survivor survivor = combatGroup.getSurvivor().orElseThrow();
 
         zombies.forEach(zombie -> {
             LOG.debug("Survivor {} attacks zombie {}", survivor.getId(), zombie.getId());
@@ -41,7 +41,7 @@ public class SurvivorAttackTransformer {
                 .filter(zombie -> !zombie.isAlive()).toList();
         zombiesKilled.forEach(zombie -> {
             LOG.debug("Zombie {} has died", zombie.getId());
-            combatContext.removeZombie(zombie);
+            combatGroup.removeZombie(zombie);
             simulationEventChannel.send(new GenericMessage<>(SimulationEvent.ZOMBIE_KILLED));
         });
 
@@ -52,6 +52,6 @@ public class SurvivorAttackTransformer {
                     simulationEventChannel.send(new GenericMessage<>(SimulationEvent.ZOMBIE_SURVIVED));
                 });
 
-        return combatContext;
+        return combatGroup;
     }
 }
